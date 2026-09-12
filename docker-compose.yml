@@ -1,0 +1,39 @@
+version: "3.9"
+# Sovereign Field LMS — docker-compose
+# Usage: docker-compose up --build
+
+services:
+  field-lms:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: sovereign-field-lms:latest
+    container_name: sovereign-field-lms
+    restart: unless-stopped
+    ports:
+      - "8789:8789"
+    environment:
+      SBB_LMS_CONTENT_PATH: ${SBB_LMS_CONTENT_PATH}
+      SBB_CERT_ISSUER: ${SBB_CERT_ISSUER}
+      SBB_OFFLINE_CACHE_SIZE_MB: ${SBB_OFFLINE_CACHE_SIZE_MB}
+      SBB_PASS_THRESHOLD: ${SBB_PASS_THRESHOLD}
+      SBB_API_KEY: ${SBB_API_KEY:-change-me}
+      SBB_N8N_EVENT_BUS_URL: ${SBB_N8N_EVENT_BUS_URL:-http://host.docker.internal:5678/webhook/event-bus}
+      SERVICE_PORT: 8789
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - ./.data:/app/.data:rw
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8789/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - sbb-platform
+
+networks:
+  sbb-platform:
+    external: true
+    name: sbb-platform-network
