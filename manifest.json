@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "PKG-011",
+  "slug": "field-lms",
+  "name": "sovereign-field-lms",
+  "domain": "EdTech & Technical Curriculum",
+  "version": "1.0.0",
+  "status": "PRODUCTION_READY",
+  "entrypoint": "src/core.py",
+  "cli_command": "sovereign-field-lms",
+  "microservice_port": 8789,
+  "n8n_webhook_path": "field-lms-trigger",
+  "n8n_workflow": "n8n/workflow.json",
+  "test_suite": "tests/test_solution.py",
+  "author": "Russell Alan Powers",
+  "license": "MIT"
+}
